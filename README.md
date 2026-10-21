@@ -1,85 +1,73 @@
-# csd-library
+# rb-csd-library
 
-Reusable implementation artifacts for projects following CSD methodology. Anything that helps implement, test, or scaffold a CSD-aligned project lives here. Methodology stays separate (the canonical CSD source); this folder is the *implementation* counterpart.
+RB Software Engineering's fork of [csd-library](https://github.com/PSA-Department-of-Engineering/csd-library) (MIT, Rafael Pires): the npm runtimes and the shared Starlight look the `foundryRB` fleet builds on, published under the `@foundryrb` scope. Why the fork exists and what it changes is recorded in [ADR-0005](docs/adr/0005-rb-fork.md).
 
-The Playbook (`playbook/`) stays separate too - it covers many topics beyond CSD (Java, FastAPI, Frontend, PowerShell, …), so `csd-library` can grow without dragging unrelated guidance along.
+Reusable implementation artifacts for projects following CSD methodology. Methodology stays separate (the canonical CSD source, `foundryRB/rb-csd`); this repo is the *implementation* counterpart.
 
 ## Layout
 
 ```
-csd-library/
+rb-csd-library/
 ├── README.md            ← you are here
-├── pytest-intent/       ← publishable Python runtime: the @intent(...) decorator for pytest
-├── csd-intent/          ← publishable Python CLI: cross-runtime intent.yaml auditor
-├── vitest-intent/       ← publishable TypeScript runtime: intent() for vitest
-├── playwright-intent/   ← publishable TypeScript runtime: intent() for Playwright e2e
-└── starlight-theme/     ← publishable TypeScript/CSS package: the shared Starlight look (stylesheet + mermaidConfig)
+├── vitest-intent/       ← @foundryrb/vitest-intent: intent() for vitest
+├── playwright-intent/   ← @foundryrb/playwright-intent: intent() for Playwright e2e
+└── starlight-theme/     ← @foundryrb/starlight-theme: the shared Starlight look (stylesheet + mermaidConfig)
 ```
 
-Brand material does not live here: this repository publishes open-source packages, and an organization's identities and deck themes belong with the applications that serve them (the design hub carries the identities, the slides workshop its theme catalog).
+The Python runtimes are not forked: `csd-intent` (the cross-runtime `intent.yaml` auditor) and `csd-pytest-intent` (the `@intent(...)` decorator for pytest) carry no brand and are consumed from PyPI as published upstream.
 
 ## How the pieces relate
 
 | Piece              | What                                                          | Consumed by |
 |--------------------|---------------------------------------------------------------|-------------|
-| `pytest-intent`    | Python+pytest runtime: the `@intent("INT-NNN")` decorator | Any Python project that wants CSD-style intent testing |
-| `csd-intent`       | Standalone Python CLI: validates `intent.yaml` and checks every claim is attested across pytest / vitest / Playwright | Any CSD project, in CI or locally, for auditing |
-| `vitest-intent`    | TS+vitest runtime: the `intent()` wrapper, same shape as pytest-intent | Any TS/JS project that wants the same |
+| `vitest-intent`    | TS+vitest runtime: the `intent()` wrapper, same shape as the pytest decorator | Any TS/JS project that wants CSD-style intent testing |
 | `playwright-intent`| TS+Playwright runtime: the `intent()` wrapper for browser e2e | Any frontend project doing CSD-style e2e |
-| `starlight-theme`  | Shared Starlight look: a token-based stylesheet (warm dark palette + Mermaid contrast layer) plus the `astro-mermaid` `mermaidConfig` object | Any Starlight docs site, via `customCss` + a config import |
+| `starlight-theme`  | Shared Starlight look: a token-based stylesheet (the RB Dark/Light palettes + Mermaid contrast layer) plus the `astro-mermaid` `mermaidConfig` object | Any Starlight docs site, via `customCss` + a config import |
+| `csd-intent` (PyPI, upstream) | Standalone Python CLI: validates `intent.yaml` and checks every claim is attested across pytest / vitest / Playwright | Every repo's CI |
 
-`starlight-theme` is a *runtime-styling* package (the look) and is independent of the STARLIGHT *intent bundle*, which ships with the playbook's `apply-intent-bundle` skill (the frontmatter + page-structure contract). A docs site can adopt either, both, or neither; the theme is consumed as an npm dependency, while the bundle is copied in by `apply-intent-bundle`.
-
-
-## Tooling that drives this
-
-The Playbook hosts the skills that operate on this folder. Cloned as a sibling of `csd-library/`, those skills reach in via relative path:
-
-- `apply-intent-bundle` - applies an Intent Bundle to a target project (the bundles ship with that skill, in the playbook)
-- `bootstrap-pytest-intent` - wires `pytest-intent` into a Python project
-- `bootstrap-vitest-intent` - wires `vitest-intent` into a JS/TS project
-- `bootstrap-starlight` - scaffolds a Starlight site and (by default) applies the `starlight` bundle
-
-Reference documentation lives in `REF-Intent-Bundle.md` (bundle contract) and `REF-CSD.md` (cites the canonical methodology site) in the playbook.
+`csd-intent` finds vitest and Playwright markers by their `intent('INT-...', ...)` call shape, not by the package they are imported from, so a repo moving from the upstream scope to `@foundryrb` keeps every attestation.
 
 ## Expected layout on disk
 
-This repo and the playbook are designed to be cloned as siblings:
+The playbook's skills (`apply-intent-bundle`, `bootstrap-vitest-intent`, `bootstrap-starlight`, ...) reach in through a sibling clone when one exists:
 
 ```
 <workspace>/
-├── playbook/   ← the playbook
-└── csd-library/         ← this repo
+├── rb-playbook/      ← the playbook
+└── rb-csd-library/   ← this repo
 ```
-
-Skills and references in the playbook point here via `../csd-library/...`.
 
 ## Releasing
 
-Releases are automated with [release-please](https://github.com/googleapis/release-please) through the org's shared CI (`PSA-Department-of-Engineering/ci` → `library.yml`). The decision, and why it diverges from the services' auto-cut model, is recorded in [ADR-0002](docs/adr/0002-release-automation.md). Distribution targets: npm packages go to the public npm registry with provenance ([ADR-0003](docs/adr/0003-public-npm-distribution.md)); Python packages go to PyPI the same way ([ADR-0004](docs/adr/0004-public-pypi-distribution.md), which together with ADR-0003 fully supersedes [ADR-0001](docs/adr/0001-private-package-distribution.md)).
+Releases are automated with [release-please](https://github.com/googleapis/release-please) through the org's shared CI (`foundryRB/rb-ci` → `library.yml`). The decision is recorded in [ADR-0002](docs/adr/0002-release-automation.md); distribution in [ADR-0003](docs/adr/0003-public-npm-distribution.md) as amended by [ADR-0005](docs/adr/0005-rb-fork.md).
 
 How a release happens:
 
-1. Land work on `main` as usual, with Conventional Commits scoped by package (`feat(pytest-intent): …`) so only that package's version moves. Day-to-day commits go straight to `main`; no PR is required.
-2. release-please maintains one **release PR per package**, accumulating the version bump + CHANGELOG from those commits. This is the only PR in the flow.
-3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release; the merge is the release gate. **Merge by rebase, never squash**: a squash merge appends a `Co-authored-by: github-actions[bot]` trailer, which the org's no-co-author hygiene gate rejects, killing the release run before release-please cuts the tags (a merged release PR then stays pending until the next push or a `workflow_dispatch` of release.yml re-drives it). A rebase merge lands the bot's own clean `chore: release main` commit as-is.
-4. On merge, release-please tags `<pkg>-vX.Y.Z`, creates the GitHub release, and:
-   - **npm** (`vitest-intent`, `playwright-intent`, `starlight-theme`): publishes to the public npm registry with a sigstore provenance attestation. Consumers install with no `.npmrc` and no token (see ADR-0003).
-   - **Python** (`csd-intent`, `csd-pytest-intent`): publishes to PyPI via trusted publishing, with PEP 740 provenance attestations. Consumers `pip install` the bare name, no git URL (see ADR-0004).
+1. Land work on `main` with Conventional Commits scoped by package (`feat(vitest-intent): …`) so only that package's version moves.
+2. release-please maintains one **release PR per package**, accumulating the version bump + CHANGELOG from those commits.
+3. The repo's tests (`.github/workflows/test.yml`) run on that PR. Merge it when you want to cut the release. **Merge by rebase, never squash**: a squash merge appends a `Co-authored-by: github-actions[bot]` trailer, which the org's no-co-author hygiene gate rejects.
+4. On merge, release-please tags `<pkg>-vX.Y.Z`, creates the GitHub release, and publishes the released npm packages to the public npm registry with a sigstore provenance attestation. Consumers install with no `.npmrc` and no token.
 
-Because those bumps are computed from the commit messages, a committed `.pre-commit-config.yaml` ships a bypassable local `commit-msg` hook that checks each message is a Conventional Commit before it lands. Install it once per clone (the `.git/hooks` install is not committed, only the config is):
+**First publish.** npm trusted publishing cannot do a package's first publish, so each `@foundryrb/*` package is published once by hand, then handed to CI:
+
+```bash
+npm login                                   # an npm account that owns the foundryrb organization
+cd vitest-intent     && npm ci && npm publish --access public && cd ..
+cd starlight-theme   && npm ci && npm publish --access public && cd ..
+cd playwright-intent && npm ci && npm publish --access public && cd ..
+```
+
+Then, on npmjs.com, open each package → Settings → Trusted publishing → GitHub Actions: organization `foundryRB`, repository `rb-csd-library`, workflow `release.yml`. From then on every release publishes from CI with no stored credential.
+
+Versioning is per-package SemVer; `release-please-config.json` and `.release-please-manifest.json` hold the package map and current versions (`bootstrap-sha` anchors release-please at the fork point, so the upstream history is not re-released). Two one-time GitHub settings are needed: allow Actions to create pull requests (Settings → Actions → General), and mark the `tests` checks required on `main`.
+
+A committed `.pre-commit-config.yaml` ships a bypassable local `commit-msg` hook that checks each message is a Conventional Commit:
 
 ```bash
 pip install pre-commit
 pre-commit install --install-hooks
 ```
 
-A non-conforming message is rejected; `git commit --no-verify` bypasses it when needed.
+## License
 
-Versioning is per-package SemVer; `release-please-config.json` and `.release-please-manifest.json` at the repo root hold the package map and current versions. Two one-time GitHub settings are needed: allow Actions to create pull requests (Settings → Actions → General), and mark the `tests` checks required on `main` so a release PR cannot merge red.
-
-## Naming and growth policy
-
-- New runtimes (e.g. a future `jest-intent`) live as siblings under `csd-library/`.
-- Intent Bundles (a claim set plus the tests that hold it) are not here: they ship with the playbook's `apply-intent-bundle` skill, so they are wherever the skill is installed.
-- Things that help implement CSD but aren't runtimes (codemods, example projects, reference data packs) can also live here once they become reusable. Until then, they stay in their host project.
+MIT. The upstream copyright (Rafael Pires) is kept in every LICENSE; the fork's modifications are RB Software Engineering's.
