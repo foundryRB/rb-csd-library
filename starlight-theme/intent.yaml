@@ -32,7 +32,7 @@ INT-SLT-003:
   version: 1.0.0
   status: active
   statement: "styles.css MUST define Dark and Light reading palettes, including the --sl-color-accent scale."
-  rationale: "The PSA reading palette is the shared look; sites consume it by importing the stylesheet, not by redefining ramps locally."
+  rationale: "The RB reading palette is the shared look; sites consume it by importing the stylesheet, not by redefining ramps locally."
   test:
     scope: unit
     component: Stylesheet
