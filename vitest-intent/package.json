@@ -1,5 +1,5 @@
 {
-  "name": "@psa-department-of-engineering/vitest-intent",
+  "name": "@foundryrb/vitest-intent",
   "version": "2.0.2",
   "description": "The intent() wrapper for vitest - links a test to one or more CSD intent claims (INT-NNN). Spec validation and cross-runtime coverage live in the standalone `csd-intent` CLI.",
   "keywords": [
@@ -14,12 +14,12 @@
   "author": "Rafael Pires",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PSA-Department-of-Engineering/csd-library.git",
+    "url": "git+https://github.com/foundryRB/rb-csd-library.git",
     "directory": "vitest-intent"
   },
-  "homepage": "https://github.com/PSA-Department-of-Engineering/csd-library/tree/main/vitest-intent#readme",
+  "homepage": "https://github.com/foundryRB/rb-csd-library/tree/main/vitest-intent#readme",
   "bugs": {
-    "url": "https://github.com/PSA-Department-of-Engineering/csd-library/issues"
+    "url": "https://github.com/foundryRB/rb-csd-library/issues"
   },
   "publishConfig": {
     "access": "public"
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "vitest": "^4.1.12"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -10,7 +10,7 @@ A tiny TypeScript library (~80 LOC) that exposes a single helper:
 
 ```typescript
 import { expect } from 'vitest';
-import { intent } from '@psa-department-of-engineering/vitest-intent';
+import { intent } from '@foundryrb/vitest-intent';
 
 intent('INT-FOO-001', 'rejects empty passwords', () => {
     expect(authenticate('user', '')).toBe(false);
@@ -41,7 +41,7 @@ That's the entire public surface. `intent()` is a thin wrapper around vitest's `
 Published to the public npm registry. No `.npmrc` and no token — install it like any other package:
 
 ```bash
-npm install --save-dev vitest @psa-department-of-engineering/vitest-intent
+npm install --save-dev vitest @foundryrb/vitest-intent
 ```
 
 Local dev against a `csd-library` checkout:
