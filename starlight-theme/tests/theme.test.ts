@@ -12,7 +12,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-import { intent } from "@psa-department-of-engineering/vitest-intent";
+import { intent } from "@foundryrb/vitest-intent";
 import { describe, expect } from "vitest";
 
 import { mermaidConfig } from "../src/index.js";
@@ -35,7 +35,7 @@ describe("mermaidConfig", () => {
 describe("styles.css", () => {
   const css = readFileSync(fileURLToPath(new URL("../styles.css", import.meta.url)), "utf8");
 
-  intent("INT-SLT-003", "defines both PSA reading appearances", () => {
+  intent("INT-SLT-003", "defines both RB reading appearances", () => {
     expect(css).toContain(":root[data-theme='dark']");
     expect(css).toContain("--sl-color-accent");
     expect(css).toContain(":root[data-theme='light']");

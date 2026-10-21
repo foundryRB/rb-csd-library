@@ -10,7 +10,7 @@ A tiny TypeScript library (~70 LOC) that exposes a single helper:
 
 ```typescript
 import { expect } from '@playwright/test';
-import { intent } from '@psa-department-of-engineering/playwright-intent';
+import { intent } from '@foundryrb/playwright-intent';
 
 intent('INT-SB-E01', 'clicking Pull all refreshes status', async ({ page }) => {
     await page.goto('http://localhost:5173');
@@ -47,7 +47,7 @@ That's the entire public surface. `intent()` is a thin wrapper around Playwright
 Published to the public npm registry. No `.npmrc` and no token — install it like any other package:
 
 ```bash
-npm install --save-dev @playwright/test @psa-department-of-engineering/playwright-intent
+npm install --save-dev @playwright/test @foundryrb/playwright-intent
 npx playwright install   # one-time browser install (~300MB)
 ```
 
