@@ -1,5 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "383dd703e12eac1c55e074702daead60244fd2da",
   "include-component-in-tag": true,
   "separator": "-",
   "packages": {
@@ -14,20 +15,6 @@
     "starlight-theme": {
       "release-type": "node",
       "component": "starlight-theme"
-    },
-    "pytest-intent": {
-      "release-type": "python",
-      "component": "pytest-intent",
-      "extra-files": [
-        { "type": "toml", "path": "pyproject.toml", "jsonpath": "$.project.version" }
-      ]
-    },
-    "csd-intent": {
-      "release-type": "python",
-      "component": "csd-intent",
-      "extra-files": [
-        { "type": "toml", "path": "pyproject.toml", "jsonpath": "$.project.version" }
-      ]
     }
   }
 }
