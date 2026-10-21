@@ -9,7 +9,7 @@
 A runtime-styling package with two consumable parts:
 
 1. **A stylesheet** (`styles.css`) with two layers:
-   - the PSA Molten Dark/Light palettes: graphite, ivory and accessible orange, with Segoe UI and Cascadia typography;
+   - the RB Software Engineering Dark/Light palettes: neutral greys and the green accent, with system font stacks;
    - a token-based Mermaid contrast layer that maps the rendered `.mermaid` SVG to Starlight's `--sl-color-*` tokens, so flowcharts and sequence diagrams keep correct contrast in both light and dark.
 2. **A `mermaidConfig` object** for the [`astro-mermaid`](https://www.npmjs.com/package/astro-mermaid) integration: the theme-neutral layout and font choices (flowchart curve, spacing, padding, `useMaxWidth`, font family and size). Diagram colour is not set here; it lives in the stylesheet against the `--sl-color-*` tokens, which flip with the active theme.
 
@@ -25,7 +25,7 @@ The CSS is fully token-based: it defines the palette once and the Mermaid layer 
 Published to the public npm registry. No `.npmrc` and no token — install it like any other package:
 
 ```bash
-npm install @psa-department-of-engineering/starlight-theme
+npm install @foundryrb/starlight-theme
 ```
 
 The site also installs `astro-mermaid` and `mermaid` itself (this package does not pull them in; it only ships the config object they consume).
@@ -46,7 +46,7 @@ In `astro.config.mjs`, spread the `mermaidConfig` into `astro-mermaid` and point
 import { defineConfig } from 'astro/config';
 import mermaid from 'astro-mermaid';
 import starlight from '@astrojs/starlight';
-import { mermaidConfig } from '@psa-department-of-engineering/starlight-theme';
+import { mermaidConfig } from '@foundryrb/starlight-theme';
 
 export default defineConfig({
   integrations: [
@@ -55,7 +55,7 @@ export default defineConfig({
     mermaid({ autoTheme: true, mermaidConfig }),
     starlight({
       title: 'My Docs',
-      customCss: ['@psa-department-of-engineering/starlight-theme/styles.css'],
+      customCss: ['@foundryrb/starlight-theme/styles.css'],
       // ...the rest of the site config
     }),
   ],
@@ -68,9 +68,9 @@ That is the whole integration. The `bootstrap-starlight` skill scaffolds new sit
 
 | Import | What |
 |---|---|
-| `@psa-department-of-engineering/starlight-theme/styles.css` | The stylesheet, for Starlight `customCss`. |
-| `import { mermaidConfig } from '@psa-department-of-engineering/starlight-theme'` | The theme-neutral `astro-mermaid` config object. |
-| `import type { StarlightThemeMermaidConfig } from '@psa-department-of-engineering/starlight-theme'` | The type of `mermaidConfig`. |
+| `@foundryrb/starlight-theme/styles.css` | The stylesheet, for Starlight `customCss`. |
+| `import { mermaidConfig } from '@foundryrb/starlight-theme'` | The theme-neutral `astro-mermaid` config object. |
+| `import type { StarlightThemeMermaidConfig } from '@foundryrb/starlight-theme'` | The type of `mermaidConfig`. |
 
 ## License
 

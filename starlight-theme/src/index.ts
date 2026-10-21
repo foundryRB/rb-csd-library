@@ -1,10 +1,10 @@
 /**
- * @psa-department-of-engineering/starlight-theme - the shared Starlight look.
+ * @foundryrb/starlight-theme - the shared Starlight look.
  *
  * One source of truth for the docs-site theme, consumed in two parts:
- *   - the stylesheet (PSA Dark/Light palettes + a token-based Mermaid contrast
+ *   - the stylesheet (RB Dark/Light palettes + a token-based Mermaid contrast
  *     layer), wired through Starlight:
- *       customCss: ['@psa-department-of-engineering/starlight-theme/styles.css']
+ *       customCss: ['@foundryrb/starlight-theme/styles.css']
  *   - the `mermaidConfig` object, spread into the astro-mermaid integration:
  *       mermaid({ autoTheme: true, mermaidConfig })
  *
